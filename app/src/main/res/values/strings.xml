@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WallsGeyser</string>
+    <string name="background_drawer">Background</string>
+    <string name="nature_drawer">Nature</string>
+    <string name="fashion_drawer">Fashion</string>
+    <string name="animals_drawer">Animals</string>
+    <string name="computer_drawer">Computer</string>
 </resources>

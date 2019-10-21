@@ -6,11 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ratushny.wallsgeyser.R
 import com.ratushny.wallsgeyser.WallsListAdapter
@@ -18,6 +23,7 @@ import com.ratushny.wallsgeyser.WallsListRepositoryImpl
 import com.ratushny.wallsgeyser.data.network.PixabayToListConverter
 import com.ratushny.wallsgeyser.data.network.PixabayToListConverterImpl
 import com.ratushny.wallsgeyser.databinding.MainScreenFragmentBinding
+import kotlinx.android.synthetic.main.main_screen_fragment.*
 
 class MainScreenFragment : Fragment() {
 

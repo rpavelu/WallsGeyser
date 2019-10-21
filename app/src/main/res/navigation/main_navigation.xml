@@ -7,5 +7,5 @@
     <fragment
         android:id="@+id/mainScreenFragment"
         android:name="com.ratushny.wallsgeyser.screens.MainScreenFragment"
-        android:label="MainScreenFragment" />
+        android:label="@string/app_name" />
 </navigation>

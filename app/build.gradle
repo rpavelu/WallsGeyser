@@ -62,4 +62,7 @@ dependencies {
 
     // Paging
     implementation "android.arch.paging:runtime:1.0.1"
+
+    // Material
+    implementation "com.google.android.material:material:1.0.0"
 }
