@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/fashion_category"
+        android:id="@+id/fashionScreenFragment"
         android:title="@string/fashion_drawer" />
     <item
-        android:id="@+id/nature_category"
+        android:id="@+id/natureScreenFragment"
         android:title="@string/nature_drawer" />
     <item
-        android:id="@+id/background_category"
+        android:id="@+id/backgroundScreenFragment"
         android:title="@string/background_drawer" />
     <item
-        android:id="@+id/animals_category"
+        android:id="@+id/animalsScreenFragment"
         android:title="@string/animals_drawer" />
     <item
-        android:id="@+id/computer_category"
+        android:id="@+id/computerScreenFragment"
         android:title="@string/computer_drawer" />
 </menu>

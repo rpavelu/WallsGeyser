@@ -14,7 +14,6 @@ class WallsListAdapter : RecyclerView.Adapter<WallsListAdapter.ViewHolder>() {
     private var wallsData: List<WallsDto> = emptyList()
 //    lateinit var mClickListener: ClickListener
 
-
 //    fun setOnItemClickListener(aClickListener: ClickListener) {
 //        mClickListener = aClickListener
 //    }
