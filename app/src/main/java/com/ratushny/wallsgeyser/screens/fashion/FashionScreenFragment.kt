@@ -55,7 +55,7 @@ class FashionScreenFragment : Fragment() {
         binding.fashionScreenRecyclerview.layoutManager = GridLayoutManager(context, 2)
 
         viewModel.wallsList.observe(viewLifecycleOwner, Observer {
-            adapter.addWalls(viewModel.wallsList.value!!)
+            adapter.addWalls(it)
         })
 
         return binding.root

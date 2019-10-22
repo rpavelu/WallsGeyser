@@ -3,6 +3,7 @@ package com.ratushny.wallsgeyser
 import com.ratushny.wallsgeyser.data.WallsDto
 import com.ratushny.wallsgeyser.data.network.PixabayService
 import com.ratushny.wallsgeyser.data.network.PixabayToListConverter
+import com.ratushny.wallsgeyser.screens.Categories
 
 interface WallsListRepository {
     suspend fun getWallsData(): MutableList<WallsDto>
@@ -13,48 +14,63 @@ interface WallsListRepository {
     suspend fun getComputerWallsData(): MutableList<WallsDto>
 }
 
-class WallsListRepositoryImpl(private val pixabayToListConverter: PixabayToListConverter) :
+class WallsListRepositoryImpl(
+    private val pixabayToListConverter: PixabayToListConverter,
+    private val service: PixabayService = PixabayService.create()
+) :
     WallsListRepository {
 
     override suspend fun getWallsData(): MutableList<WallsDto> {
-        val service = PixabayService.create()
-        val wallsResponseCall =
-            service.getPixabayDataService("14009683-670121ec2afd0996e9106c0d0", "")
-        return pixabayToListConverter.convertWalls(wallsResponseCall)
+        return pixabayToListConverter.convertWalls(
+            service.getPixabayDataService(
+                BuildConfig.PIXABAY_KEY,
+                ""
+            )
+        )
     }
 
     override suspend fun getFashionWallsData(): MutableList<WallsDto> {
-        val service = PixabayService.create()
-        val wallsResponseCall =
-            service.getPixabayDataService("14009683-670121ec2afd0996e9106c0d0", "fashion")
-        return pixabayToListConverter.convertWalls(wallsResponseCall)
+        return pixabayToListConverter.convertWalls(
+            service.getPixabayDataService(
+                BuildConfig.PIXABAY_KEY,
+                Categories.FASHION.str
+            )
+        )
     }
 
     override suspend fun getNatureWallsData(): MutableList<WallsDto> {
-        val service = PixabayService.create()
-        val wallsResponseCall =
-            service.getPixabayDataService("14009683-670121ec2afd0996e9106c0d0", "nature")
-        return pixabayToListConverter.convertWalls(wallsResponseCall)
+        return pixabayToListConverter.convertWalls(
+            service.getPixabayDataService(
+                BuildConfig.PIXABAY_KEY,
+                Categories.NATURE.str
+            )
+        )
     }
 
     override suspend fun getBackgroundWallsData(): MutableList<WallsDto> {
-        val service = PixabayService.create()
-        val wallsResponseCall =
-            service.getPixabayDataService("14009683-670121ec2afd0996e9106c0d0", "background")
-        return pixabayToListConverter.convertWalls(wallsResponseCall)
+        return pixabayToListConverter.convertWalls(
+            service.getPixabayDataService(
+                BuildConfig.PIXABAY_KEY,
+                Categories.BACKGROUND.str
+            )
+        )
     }
 
     override suspend fun getAnimalsWallsData(): MutableList<WallsDto> {
-        val service = PixabayService.create()
-        val wallsResponseCall =
-            service.getPixabayDataService("14009683-670121ec2afd0996e9106c0d0", "animals")
-        return pixabayToListConverter.convertWalls(wallsResponseCall)
+        return pixabayToListConverter.convertWalls(
+            service.getPixabayDataService(
+                BuildConfig.PIXABAY_KEY,
+                Categories.ANIMALS.str
+            )
+        )
     }
 
     override suspend fun getComputerWallsData(): MutableList<WallsDto> {
-        val service = PixabayService.create()
-        val wallsResponseCall =
-            service.getPixabayDataService("14009683-670121ec2afd0996e9106c0d0", "computer")
-        return pixabayToListConverter.convertWalls(wallsResponseCall)
+        return pixabayToListConverter.convertWalls(
+            service.getPixabayDataService(
+                BuildConfig.PIXABAY_KEY,
+                Categories.COMPUTER.str
+            )
+        )
     }
 }
