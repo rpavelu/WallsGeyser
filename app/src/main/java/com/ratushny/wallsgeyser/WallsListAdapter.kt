@@ -1,6 +1,5 @@
 package com.ratushny.wallsgeyser
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,6 @@ class WallsListAdapter : RecyclerView.Adapter<WallsListAdapter.ViewHolder>() {
     fun addWalls(wallsList: List<WallsDto>) {
         wallsData = wallsList
         notifyDataSetChanged()
-        Log.i("WallsListAdapter", "WallsData: " + wallsData.size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -49,7 +47,6 @@ class WallsListAdapter : RecyclerView.Adapter<WallsListAdapter.ViewHolder>() {
     ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         override fun onClick(v: View) {
             mClickListener.onClick(adapterPosition, v)
-            Log.i("WallsListAdapter", "adapterPosition: $adapterPosition")
         }
 
         init {

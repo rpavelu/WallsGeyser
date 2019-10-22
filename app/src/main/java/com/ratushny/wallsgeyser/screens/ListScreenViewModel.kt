@@ -1,5 +1,6 @@
-package com.ratushny.wallsgeyser.screens.animals
+package com.ratushny.wallsgeyser.screens
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class AnimalsScreenViewModel(private val wallsListRepository: WallsListRepository) : ViewModel(),
+class ListScreenViewModel(private val wallsListRepository: WallsListRepository, private val categories: Categories) : ViewModel(),
     CoroutineScope {
 
     private val _wallsList = MutableLiveData<List<WallsDto>>()
@@ -27,7 +28,8 @@ class AnimalsScreenViewModel(private val wallsListRepository: WallsListRepositor
 
     fun getData() {
         launch {
-            _wallsList.value = wallsListRepository.getAnimalsWallsData()
+            _wallsList.value = wallsListRepository.getWallsData(categories)
+            Log.i("ListScreenViewModel", "WallsList: ${_wallsList.value}")
         }
     }
 }
