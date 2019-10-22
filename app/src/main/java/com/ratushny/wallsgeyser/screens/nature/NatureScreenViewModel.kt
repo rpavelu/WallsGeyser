@@ -15,8 +15,8 @@ import kotlin.coroutines.CoroutineContext
 class NatureScreenViewModel(private val wallsListRepository: WallsListRepository) : ViewModel(),
     CoroutineScope {
 
-    private val _wallsList = MutableLiveData<MutableList<WallsDto>>()
-    val wallsList: LiveData<MutableList<WallsDto>>
+    private val _wallsList = MutableLiveData<List<WallsDto>>()
+    val wallsList: LiveData<List<WallsDto>>
         get() = _wallsList
 
     private val viewModelJob = SupervisorJob()

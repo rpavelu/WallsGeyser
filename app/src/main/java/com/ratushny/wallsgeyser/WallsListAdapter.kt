@@ -12,17 +12,17 @@ import com.ratushny.wallsgeyser.data.WallsDto
 class WallsListAdapter : RecyclerView.Adapter<WallsListAdapter.ViewHolder>() {
 
     private var wallsData: List<WallsDto> = emptyList()
-//    lateinit var mClickListener: ClickListener
+    lateinit var mClickListener: ClickListener
 
-//    fun setOnItemClickListener(aClickListener: ClickListener) {
-//        mClickListener = aClickListener
-//    }
+    fun setOnItemClickListener(aClickListener: ClickListener) {
+        mClickListener = aClickListener
+    }
 
-//    interface ClickListener {
-//        fun onClick(pos: Int, aView: View)
-//    }
+    interface ClickListener {
+        fun onClick(pos: Int, aView: View)
+    }
 
-    fun addWalls(wallsList: MutableList<WallsDto>) {
+    fun addWalls(wallsList: List<WallsDto>) {
         wallsData = wallsList
         notifyDataSetChanged()
         Log.i("WallsListAdapter", "WallsData: " + wallsData.size)
@@ -46,5 +46,14 @@ class WallsListAdapter : RecyclerView.Adapter<WallsListAdapter.ViewHolder>() {
     inner class ViewHolder(
         itemView: View,
         val wallsImageView: ImageView = itemView.findViewById(R.id.wallImageView)
-    ) : RecyclerView.ViewHolder(itemView)
+    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        override fun onClick(v: View) {
+            mClickListener.onClick(adapterPosition, v)
+            Log.i("WallsListAdapter", "adapterPosition: $adapterPosition")
+        }
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+    }
 }

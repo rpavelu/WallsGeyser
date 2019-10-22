@@ -6,12 +6,12 @@ import com.ratushny.wallsgeyser.data.network.PixabayToListConverter
 import com.ratushny.wallsgeyser.screens.Categories
 
 interface WallsListRepository {
-    suspend fun getWallsData(): MutableList<WallsDto>
-    suspend fun getFashionWallsData(): MutableList<WallsDto>
-    suspend fun getNatureWallsData(): MutableList<WallsDto>
-    suspend fun getBackgroundWallsData(): MutableList<WallsDto>
-    suspend fun getAnimalsWallsData(): MutableList<WallsDto>
-    suspend fun getComputerWallsData(): MutableList<WallsDto>
+    suspend fun getWallsData(): List<WallsDto>
+    suspend fun getFashionWallsData(): List<WallsDto>
+    suspend fun getNatureWallsData(): List<WallsDto>
+    suspend fun getBackgroundWallsData(): List<WallsDto>
+    suspend fun getAnimalsWallsData(): List<WallsDto>
+    suspend fun getComputerWallsData(): List<WallsDto>
 }
 
 class WallsListRepositoryImpl(
@@ -20,7 +20,7 @@ class WallsListRepositoryImpl(
 ) :
     WallsListRepository {
 
-    override suspend fun getWallsData(): MutableList<WallsDto> {
+    override suspend fun getWallsData(): List<WallsDto> {
         return pixabayToListConverter.convertWalls(
             service.getPixabayDataService(
                 BuildConfig.PIXABAY_KEY,
@@ -29,47 +29,47 @@ class WallsListRepositoryImpl(
         )
     }
 
-    override suspend fun getFashionWallsData(): MutableList<WallsDto> {
+    override suspend fun getFashionWallsData(): List<WallsDto> {
         return pixabayToListConverter.convertWalls(
             service.getPixabayDataService(
                 BuildConfig.PIXABAY_KEY,
-                Categories.FASHION.str
+                Categories.FASHION.getString
             )
         )
     }
 
-    override suspend fun getNatureWallsData(): MutableList<WallsDto> {
+    override suspend fun getNatureWallsData(): List<WallsDto> {
         return pixabayToListConverter.convertWalls(
             service.getPixabayDataService(
                 BuildConfig.PIXABAY_KEY,
-                Categories.NATURE.str
+                Categories.NATURE.getString
             )
         )
     }
 
-    override suspend fun getBackgroundWallsData(): MutableList<WallsDto> {
+    override suspend fun getBackgroundWallsData(): List<WallsDto> {
         return pixabayToListConverter.convertWalls(
             service.getPixabayDataService(
                 BuildConfig.PIXABAY_KEY,
-                Categories.BACKGROUND.str
+                Categories.BACKGROUND.getString
             )
         )
     }
 
-    override suspend fun getAnimalsWallsData(): MutableList<WallsDto> {
+    override suspend fun getAnimalsWallsData(): List<WallsDto> {
         return pixabayToListConverter.convertWalls(
             service.getPixabayDataService(
                 BuildConfig.PIXABAY_KEY,
-                Categories.ANIMALS.str
+                Categories.ANIMALS.getString
             )
         )
     }
 
-    override suspend fun getComputerWallsData(): MutableList<WallsDto> {
+    override suspend fun getComputerWallsData(): List<WallsDto> {
         return pixabayToListConverter.convertWalls(
             service.getPixabayDataService(
                 BuildConfig.PIXABAY_KEY,
-                Categories.COMPUTER.str
+                Categories.COMPUTER.getString
             )
         )
     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -49,10 +50,18 @@ class ComputerScreenFragment : Fragment() {
         val adapter = WallsListAdapter()
         binding.computerScreenRecyclerview.adapter = adapter
 
-        binding.computerScreenRecyclerview.layoutManager = GridLayoutManager(context, 2)
+        binding.computerScreenRecyclerview.layoutManager =
+            GridLayoutManager(context, resources.getInteger(R.integer.phone_grid))
 
         viewModel.wallsList.observe(viewLifecycleOwner, Observer {
             adapter.addWalls(it)
+        })
+
+        // Setting on click listener to adapter
+        adapter.setOnItemClickListener(object : WallsListAdapter.ClickListener {
+            override fun onClick(pos: Int, aView: View) {
+                Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
+            }
         })
 
         return binding.root
