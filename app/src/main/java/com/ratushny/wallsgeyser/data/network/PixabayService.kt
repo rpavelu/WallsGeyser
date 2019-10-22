@@ -8,7 +8,9 @@ import retrofit2.http.Query
 interface PixabayService {
 
     @GET(".")
-    suspend fun getPixabayDataService(@Query("key") key: String, @Query("category") category: String): PixabayResponse
+    suspend fun getPixabayDataService(
+        @Query("key") key: String, @Query("category") category: String, @Query("page") page: Int
+    ): PixabayResponse
 
     companion object Factory {
         fun create(): PixabayService {

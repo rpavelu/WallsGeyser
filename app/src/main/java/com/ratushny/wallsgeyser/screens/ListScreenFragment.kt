@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -28,6 +29,14 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
 
     private lateinit var binding: MainScreenFragmentBinding
     private lateinit var viewModel: ListScreenViewModel
+
+    var visibleItemCount = 0
+    var totalItemCount = 0
+    var previousTotal = 0
+    val visibleThreshold = 10
+    var firstVisibleItem = 0
+    var page = 1
+    private var loading = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +52,11 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
 
         viewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return ListScreenViewModel(WallsListRepositoryImpl(PixabayToListConverterImpl()), categories).also {
-                    it.getData()
+                return ListScreenViewModel(
+                    WallsListRepositoryImpl(PixabayToListConverterImpl()),
+                    categories
+                ).also {
+                    it.getData(1)
                 } as T
             }
         }).get(ListScreenViewModel::class.java)
@@ -56,9 +68,33 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
         val adapter = WallsListAdapter()
         binding.mainScreenRecyclerview.adapter = adapter
 
-        // Adding grid layout
-        binding.mainScreenRecyclerview.layoutManager =
-            GridLayoutManager(context, resources.getInteger(R.integer.phone_grid))
+        // Sick pagination starts right here
+        val mLayoutManager = GridLayoutManager(context, resources.getInteger(R.integer.phone_grid))
+        binding.mainScreenRecyclerview.layoutManager = mLayoutManager
+
+        binding.mainScreenRecyclerview.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                visibleItemCount = recyclerView.childCount
+                totalItemCount = mLayoutManager.itemCount
+                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition()
+
+                if (loading) {
+                    if (totalItemCount > previousTotal) {
+                        loading = false
+                        previousTotal = totalItemCount
+                    }
+                }
+
+                if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+                    page++
+                    viewModel.getData(page)
+                    loading = true
+                }
+            }
+        })
 
         viewModel.wallsList.observe(viewLifecycleOwner, Observer {
             adapter.addWalls(it)
