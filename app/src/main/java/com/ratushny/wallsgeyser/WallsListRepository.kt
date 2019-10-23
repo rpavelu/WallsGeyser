@@ -7,6 +7,11 @@ import com.ratushny.wallsgeyser.screens.Categories
 
 interface WallsListRepository {
     suspend fun getWallsData(categories: Categories, page: Int): List<WallsDto>
+    suspend fun getSearchWallsData(
+        categories: Categories,
+        page: Int,
+        searchWords: String
+    ): List<WallsDto>
 }
 
 class WallsListRepositoryImpl(
@@ -20,7 +25,23 @@ class WallsListRepositoryImpl(
             service.getPixabayDataService(
                 BuildConfig.PIXABAY_KEY,
                 categories.getString,
-                page
+                page,
+                ""
+            )
+        )
+    }
+
+    override suspend fun getSearchWallsData(
+        categories: Categories,
+        page: Int,
+        searchWords: String
+    ): List<WallsDto> {
+        return pixabayToListConverter.convertWalls(
+            service.getPixabayDataService(
+                BuildConfig.PIXABAY_KEY,
+                categories.getString,
+                page,
+                searchWords
             )
         )
     }

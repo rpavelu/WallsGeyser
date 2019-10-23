@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/searchScreenFragment"
+        android:title="@string/search_drawer" />
+    <item
         android:id="@+id/fashionScreenFragment"
         android:title="@string/fashion_drawer" />
     <item

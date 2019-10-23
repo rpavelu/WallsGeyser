@@ -28,4 +28,8 @@
         android:id="@+id/allScreenFragment"
         android:name="com.ratushny.wallsgeyser.screens.all.AllScreenFragment"
         android:label="@string/app_name" />
+    <fragment
+        android:id="@+id/searchScreenFragment"
+        android:name="com.ratushny.wallsgeyser.screens.search.SearchScreenFragment"
+        android:label="@string/search_drawer" />
 </navigation>

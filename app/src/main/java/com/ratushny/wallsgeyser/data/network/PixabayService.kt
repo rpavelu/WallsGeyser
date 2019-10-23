@@ -9,7 +9,7 @@ interface PixabayService {
 
     @GET(".")
     suspend fun getPixabayDataService(
-        @Query("key") key: String, @Query("category") category: String, @Query("page") page: Int
+        @Query("key") key: String, @Query("category") category: String, @Query("page") page: Int, @Query("q") searchRequest: String
     ): PixabayResponse
 
     companion object Factory {
