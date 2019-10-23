@@ -17,9 +17,13 @@ class ListScreenViewModel(
 ) : ViewModel(),
     CoroutineScope {
 
-    private val _wallsList = MutableLiveData<List<WallsDto>>()
+    private val _wallsList = MutableLiveData<List<WallsDto>>().apply { value = emptyList() }
     val wallsList: LiveData<List<WallsDto>>
         get() = _wallsList
+
+    private val _exceptions = MutableLiveData<Exception>()
+    val exceptions: LiveData<Exception>
+        get() = _exceptions
 
     private val wallsPage = MutableLiveData<Int>().apply { value = 1 }
 
@@ -41,13 +45,15 @@ class ListScreenViewModel(
     }
 
     fun getData() {
+        _exceptions.value = null
         val page = requireNotNull(wallsPage.value)
         launch {
-            if (page == 1)
-                _wallsList.value = wallsListRepository.getWallsData(categories, page)
-            else
+            try {
                 _wallsList.value =
                     _wallsList.value?.plus(wallsListRepository.getWallsData(categories, page))
+            } catch (e: Exception) {
+                _exceptions.value = e
+            }
         }
     }
 }

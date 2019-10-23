@@ -105,6 +105,19 @@ class SearchScreenFragment : Fragment() {
             }
         })
 
+        viewModel.exceptions.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                binding.errorButtonSearchScreen.visibility = View.VISIBLE
+                binding.searchScreenRecyclerview.visibility = View.GONE
+                binding.errorTextSearchScreen.visibility = View.VISIBLE
+                binding.errorTextSearchScreen.text = it.message
+            } else {
+                binding.errorButtonSearchScreen.visibility = View.GONE
+                binding.searchScreenRecyclerview.visibility = View.VISIBLE
+                binding.errorTextSearchScreen.visibility = View.GONE
+            }
+        })
+
         viewModel.wallsList.observe(viewLifecycleOwner, Observer {
             adapter.addWalls(it)
         })

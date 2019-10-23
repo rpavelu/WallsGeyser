@@ -22,12 +22,11 @@ import com.ratushny.wallsgeyser.R
 import com.ratushny.wallsgeyser.WallsListAdapter
 import com.ratushny.wallsgeyser.WallsListRepositoryImpl
 import com.ratushny.wallsgeyser.data.network.PixabayToListConverterImpl
-import com.ratushny.wallsgeyser.databinding.MainScreenFragmentBinding
-import kotlin.system.exitProcess
+import com.ratushny.wallsgeyser.databinding.ListScreenFragmentBinding
 
 abstract class ListScreenFragment(private val categories: Categories) : Fragment() {
 
-    private lateinit var binding: MainScreenFragmentBinding
+    private lateinit var binding: ListScreenFragmentBinding
     private lateinit var viewModel: ListScreenViewModel
 
     private val visibleThreshold = 4
@@ -37,7 +36,7 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = MainScreenFragmentBinding.inflate(
+        binding = ListScreenFragmentBinding.inflate(
             inflater,
             container,
             false
@@ -54,17 +53,17 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
             }
         }).get(ListScreenViewModel::class.java)
 
-        binding.mainScreenViewModel = viewModel
+        binding.listScreenViewModel = viewModel
         binding.lifecycleOwner = this
 
         val adapter = WallsListAdapter()
-        binding.mainScreenRecyclerview.adapter = adapter
+        binding.listScreenRecyclerview.adapter = adapter
 
         val mLayoutManager = GridLayoutManager(context, resources.getInteger(R.integer.phone_grid))
-        binding.mainScreenRecyclerview.layoutManager = mLayoutManager
+        binding.listScreenRecyclerview.layoutManager = mLayoutManager
 
         // Pagination
-        binding.mainScreenRecyclerview.addOnScrollListener(object :
+        binding.listScreenRecyclerview.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 
@@ -90,6 +89,19 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
                     viewModel.getData()
                     viewModel.loading.value = true
                 }
+            }
+        })
+
+        viewModel.exceptions.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                binding.errorButton.visibility = View.VISIBLE
+                binding.listScreenRecyclerview.visibility = View.GONE
+                binding.errorText.visibility = View.VISIBLE
+                binding.errorText.text = it.message
+            } else {
+                binding.errorButton.visibility = View.GONE
+                binding.listScreenRecyclerview.visibility = View.VISIBLE
+                binding.errorText.visibility = View.GONE
             }
         })
 

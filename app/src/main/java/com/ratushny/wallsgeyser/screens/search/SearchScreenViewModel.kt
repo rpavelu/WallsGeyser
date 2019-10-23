@@ -12,7 +12,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-
 class SearchScreenViewModel(
     private val wallsListRepository: WallsListRepository
 ) : ViewModel(),
@@ -21,6 +20,10 @@ class SearchScreenViewModel(
     private val _wallsList = MutableLiveData<List<WallsDto>>()
     val wallsList: LiveData<List<WallsDto>>
         get() = _wallsList
+
+    private val _exceptions = MutableLiveData<Exception>()
+    val exceptions: LiveData<Exception>
+        get() = _exceptions
 
     private val wallsPage = MutableLiveData<Int>().apply { value = 1 }
 
@@ -52,24 +55,29 @@ class SearchScreenViewModel(
     }
 
     fun getData() {
+        _exceptions.value = null
+        val category = requireNotNull(wallsCategory.value)
+        val words = requireNotNull(searchWords.value)
+        val page = requireNotNull(wallsPage.value)
         launch {
-            val category = requireNotNull(wallsCategory.value)
-            val words = requireNotNull(searchWords.value)
-            val page = requireNotNull(wallsPage.value)
-            if (page == 1) {
-                _wallsList.value = wallsListRepository.getSearchWallsData(
-                    category,
-                    page,
-                    words
-                )
-            } else
-                _wallsList.value = _wallsList.value?.plus(
-                    wallsListRepository.getSearchWallsData(
+            try {
+                if (page == 1) {
+                    _wallsList.value = wallsListRepository.getSearchWallsData(
                         category,
                         page,
                         words
                     )
-                )
+                } else
+                    _wallsList.value = _wallsList.value?.plus(
+                        wallsListRepository.getSearchWallsData(
+                            category,
+                            page,
+                            words
+                        )
+                    )
+            } catch (e: Exception) {
+                _exceptions.value = e
+            }
         }
     }
 }
