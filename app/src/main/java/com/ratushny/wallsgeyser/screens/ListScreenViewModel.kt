@@ -21,6 +21,14 @@ class ListScreenViewModel(
     val wallsList: LiveData<List<WallsDto>>
         get() = _wallsList
 
+    private val wallsPage = MutableLiveData<Int>().apply { value = 1 }
+
+    val previousTotal = MutableLiveData<Int>().apply { value = 0 }
+    val totalItemCount = MutableLiveData<Int>().apply { value = 0 }
+    val visibleItemCount = MutableLiveData<Int>().apply { value = 0 }
+    val firstVisibleItem = MutableLiveData<Int>().apply { value = 0 }
+    val loading = MutableLiveData<Boolean>().apply { value = true }
+
     private val viewModelJob = SupervisorJob()
     override val coroutineContext: CoroutineContext = Dispatchers.Main + viewModelJob
 
@@ -28,12 +36,18 @@ class ListScreenViewModel(
         viewModelJob.cancel()
     }
 
-    fun getData(page: Int) {
+    fun increasePage() {
+        wallsPage.value = wallsPage.value?.plus(1)
+    }
+
+    fun getData() {
+        val page = requireNotNull(wallsPage.value)
         launch {
             if (page == 1)
                 _wallsList.value = wallsListRepository.getWallsData(categories, page)
             else
-                _wallsList.value = _wallsList.value?.plus(wallsListRepository.getWallsData(categories, page))
+                _wallsList.value =
+                    _wallsList.value?.plus(wallsListRepository.getWallsData(categories, page))
         }
     }
 }

@@ -26,7 +26,7 @@ class WallsListRepositoryImpl(
                 BuildConfig.PIXABAY_KEY,
                 categories.getString,
                 page,
-                ""
+                Categories.ALL.getString
             )
         )
     }

@@ -4,11 +4,11 @@ import android.app.WallpaperManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -30,22 +30,15 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
     private lateinit var binding: MainScreenFragmentBinding
     private lateinit var viewModel: ListScreenViewModel
 
-    private var visibleItemCount = 0
-    private var totalItemCount = 0
-    private var previousTotal = 0
-    private val visibleThreshold = 10
-    private var firstVisibleItem = 0
-    private var page = 1
-    private var loading = true
+    private val visibleThreshold = 4
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(
+        binding = MainScreenFragmentBinding.inflate(
             inflater,
-            R.layout.main_screen_fragment,
             container,
             false
         )
@@ -56,7 +49,7 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
                     WallsListRepositoryImpl(PixabayToListConverterImpl()),
                     categories
                 ).also {
-                    it.getData(page)
+                    it.getData()
                 } as T
             }
         }).get(ListScreenViewModel::class.java)
@@ -74,23 +67,28 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
         binding.mainScreenRecyclerview.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
 
-                visibleItemCount = recyclerView.childCount
-                totalItemCount = mLayoutManager.itemCount
-                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition()
+                viewModel.visibleItemCount.value = recyclerView.childCount
+                viewModel.totalItemCount.value = mLayoutManager.itemCount
+                viewModel.firstVisibleItem.value = mLayoutManager.findFirstVisibleItemPosition()
+
+                val previousTotal = requireNotNull(viewModel.previousTotal.value)
+                val totalItemCount = requireNotNull(viewModel.totalItemCount.value)
+                val visibleItemCount = requireNotNull(viewModel.visibleItemCount.value)
+                val firstVisibleItem = requireNotNull(viewModel.firstVisibleItem.value)
+                val loading = requireNotNull(viewModel.loading.value)
 
                 if (loading) {
                     if (totalItemCount > previousTotal) {
-                        loading = false
-                        previousTotal = totalItemCount
+                        viewModel.loading.value = false
+                        viewModel.previousTotal.value = viewModel.totalItemCount.value
                     }
                 }
 
                 if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-                    page++
-                    viewModel.getData(page)
-                    loading = true
+                    viewModel.increasePage()
+                    viewModel.getData()
+                    viewModel.loading.value = true
                 }
             }
         })
@@ -118,7 +116,6 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
                             resource: Bitmap,
                             transition: Transition<in Bitmap>?
                         ) {
-                            // Setting wallpaper as bitmap
                             wallpaperManager.setBitmap(resource)
                         }
 

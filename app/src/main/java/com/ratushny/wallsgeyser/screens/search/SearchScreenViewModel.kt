@@ -1,6 +1,5 @@
 package com.ratushny.wallsgeyser.screens.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,12 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
-import android.widget.EditText
-import androidx.databinding.InverseBindingAdapter
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import androidx.databinding.InverseMethod
 
 
 class SearchScreenViewModel(
@@ -29,11 +22,17 @@ class SearchScreenViewModel(
     val wallsList: LiveData<List<WallsDto>>
         get() = _wallsList
 
-    val wallsPage = MutableLiveData<Int>().apply { value = 1 }
+    private val wallsPage = MutableLiveData<Int>().apply { value = 1 }
 
     val wallsCategory = MutableLiveData<Categories>()
 
     val searchWords = MutableLiveData<String>().apply { value = "" }
+
+    val previousTotal = MutableLiveData<Int>().apply { value = 0 }
+    val totalItemCount = MutableLiveData<Int>().apply { value = 0 }
+    val visibleItemCount = MutableLiveData<Int>().apply { value = 0 }
+    val firstVisibleItem = MutableLiveData<Int>().apply { value = 0 }
+    val loading = MutableLiveData<Boolean>().apply { value = true }
 
     private val viewModelJob = SupervisorJob()
     override val coroutineContext: CoroutineContext = Dispatchers.Main + viewModelJob
@@ -42,17 +41,27 @@ class SearchScreenViewModel(
         viewModelJob.cancel()
     }
 
-    fun getData(page: Int) {
+    fun increasePage() {
+        wallsPage.value = wallsPage.value?.plus(1)
+    }
+
+    fun getDataButton() {
+        wallsPage.value = 1
+        previousTotal.value = 0
+        getData()
+    }
+
+    fun getData() {
         launch {
             val category = requireNotNull(wallsCategory.value)
             val words = requireNotNull(searchWords.value)
+            val page = requireNotNull(wallsPage.value)
             if (page == 1) {
                 _wallsList.value = wallsListRepository.getSearchWallsData(
                     category,
                     page,
                     words
                 )
-                Log.i("SearchScreenViewModel", "Page: $page")
             } else
                 _wallsList.value = _wallsList.value?.plus(
                     wallsListRepository.getSearchWallsData(
