@@ -4,7 +4,6 @@ import android.app.WallpaperManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +23,7 @@ import com.ratushny.wallsgeyser.WallsListAdapter
 import com.ratushny.wallsgeyser.WallsListRepositoryImpl
 import com.ratushny.wallsgeyser.data.network.PixabayToListConverterImpl
 import com.ratushny.wallsgeyser.databinding.MainScreenFragmentBinding
+import kotlin.system.exitProcess
 
 abstract class ListScreenFragment(private val categories: Categories) : Fragment() {
 
@@ -117,6 +117,7 @@ abstract class ListScreenFragment(private val categories: Categories) : Fragment
                             transition: Transition<in Bitmap>?
                         ) {
                             wallpaperManager.setBitmap(resource)
+                            activity?.moveTaskToBack(true)
                         }
 
                     })
