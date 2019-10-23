@@ -8,10 +8,10 @@
 
         <Button
             android:id="@+id/search_button"
+            closeSoftKeyboardClickListener="@{searchScreenViewModel::getDataButton}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/basic_paging"
-            android:onClick="@{() -> searchScreenViewModel.getDataButton()}"
             android:text="@string/search_button"
             app:layout_constraintBottom_toBottomOf="@+id/categories_spinner"
             app:layout_constraintEnd_toEndOf="parent"
