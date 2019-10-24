@@ -1,15 +1,11 @@
 package com.ratushny.wallsgeyser.screens.search
 
-import android.app.WallpaperManager
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -17,14 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.ratushny.wallsgeyser.R
 import com.ratushny.wallsgeyser.WallsListAdapter
 import com.ratushny.wallsgeyser.WallsListRepositoryImpl
 import com.ratushny.wallsgeyser.data.network.PixabayToListConverterImpl
 import com.ratushny.wallsgeyser.databinding.SearchScreenFragmentBinding
+import com.ratushny.wallsgeyser.extensions.setWallsClickListener
 import com.ratushny.wallsgeyser.screens.Categories
 
 class SearchScreenFragment : Fragment() {
@@ -122,30 +116,8 @@ class SearchScreenFragment : Fragment() {
             adapter.addWalls(it)
         })
 
-        adapter.setOnItemClickListener(object : WallsListAdapter.ClickListener {
-            override fun onClick(pos: Int, aView: View) {
+        adapter.setWallsClickListener(requireActivity())
 
-                Toast.makeText(context, "Setting wallpaper", Toast.LENGTH_SHORT).show()
-
-                val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(context)
-
-                val currentWalls = requireNotNull(viewModel.wallsList.value)
-                Glide.with(requireContext())
-                    .asBitmap()
-                    .load(currentWalls[pos].largeImageURL)
-                    .into(object : CustomTarget<Bitmap>() {
-                        override fun onLoadCleared(placeholder: Drawable?) = Unit
-
-                        override fun onResourceReady(
-                            resource: Bitmap,
-                            transition: Transition<in Bitmap>?
-                        ) {
-                            wallpaperManager.setBitmap(resource)
-                            activity?.moveTaskToBack(true)
-                        }
-                    })
-            }
-        })
         return binding.root
     }
 }

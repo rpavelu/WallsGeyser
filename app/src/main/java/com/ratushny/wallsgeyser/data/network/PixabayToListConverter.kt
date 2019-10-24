@@ -8,7 +8,5 @@ interface PixabayToListConverter {
 
 class PixabayToListConverterImpl : PixabayToListConverter {
     override fun convertWalls(response: PixabayResponse): List<WallsDto> =
-        response.hits.map { wallsDto ->
-            WallsDto(wallsDto.previewURL, wallsDto.largeImageURL)
-        }
+        response.hits
 }
